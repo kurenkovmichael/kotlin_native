@@ -1,0 +1,18 @@
+source 'https://stash.desktop.dev.yandex.net/scm/mcp/mobile-cocoa-pod-specs.git'
+source 'https://github.com/CocoaPods/Specs.git'
+
+workspace 'iosApp.xcworkspace'
+
+platform :ios, '11.0'
+use_modular_headers!
+
+target 'iosApp' do
+    project 'iosApp'
+    inhibit_all_warnings!
+
+    pod 'KotlinNative', :path => 'KotlinNative'
+    pod 'YandexMapKit', '= 148.18.26'
+    pod 'RxSwift'
+    pod 'RxCocoa'
+
+end

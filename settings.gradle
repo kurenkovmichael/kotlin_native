@@ -1,0 +1,4 @@
+rootProject.name = 'yandex-sample'
+
+include ':android'
+include ':multiplatform'

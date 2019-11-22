@@ -1,0 +1,107 @@
+Properties properties = new Properties()
+if (project.rootProject.file('local.properties').canRead()) {
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+}
+def hasAndroidSdk = System.env['ANDROID_HOME'] as boolean || properties.containsKey('sdk.dir')
+def hasXcode = 'which xcodebuild'.execute().waitFor() == 0
+
+def enableIos = hasXcode
+def enableAndroid = hasAndroidSdk
+
+println("  Enabled for: ${[enableIos ? "iOS" : null, enableAndroid ? "Android" : null].minus(null).join(', ')}")
+println("  Tasks: ${project.gradle.startParameter.taskNames}")
+println("  Start parameter: ${project.gradle.startParameter.toString()}")
+
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
+
+if (enableAndroid) {
+    apply plugin: 'com.android.library'
+    apply plugin: 'io.mironov.smuggler'
+}
+
+kotlin {
+    if (enableIos) {
+        def iosSdkName = System.getenv("SDK_NAME")
+        if (iosSdkName?.startsWith("iphoneos")) {
+            iosArm64('ios')
+        } else {
+            iosX64('ios')
+        }
+    }
+
+    if (enableAndroid) {
+        android()
+    }
+
+    sourceSets {
+        all {
+            languageSettings {
+                useExperimentalAnnotation('kotlinx.coroutines.ExperimentalCoroutinesApi')
+                useExperimentalAnnotation('kotlinx.coroutines.FlowPreview')
+            }
+        }
+
+        iosMain {
+            languageSettings {
+                // Needed for main dispatcher implementation
+                useExperimentalAnnotation('kotlinx.coroutines.InternalCoroutinesApi')
+            }
+        }
+
+        commonMain.dependencies {
+            implementation kotlin('stdlib')
+            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.1"
+        }
+
+        iosMain.dependencies {
+            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.3.1"
+        }
+
+        androidMain.dependencies {
+            api "com.yandex.android:mapkit:3.4.0"
+            api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.1"
+            api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.1"
+            api "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.3.1"
+            api "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.3.1"
+            implementation "com.jakewharton.timber:timber:4.5.1"
+            implementation 'androidx.appcompat:appcompat:1.0.2'
+        }
+    }
+
+    if (enableIos) {
+        targets {
+            configure([ios]) {
+                compilations.all {
+                    cinterops {
+                        YandexMapKit {
+                            compilerOpts "-F/${rootProject.projectDir}/../../Pods/YandexRuntime"
+                            compilerOpts "-F/${rootProject.projectDir}/../../Pods/YandexMapKit"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+if (enableAndroid) {
+    android {
+        compileSdkVersion 28
+
+        defaultConfig {
+            minSdkVersion 24
+            targetSdkVersion 28
+        }
+
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+
+        sourceSets {
+            main {
+                setRoot 'src/androidMain'
+            }
+        }
+    }
+}

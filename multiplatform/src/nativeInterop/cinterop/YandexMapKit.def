@@ -1,0 +1,5 @@
+package = platform.YandexMapKit
+depends = Foundation UIKit
+language = Objective-C
+modules = YandexMapKit
+excludeDependentModules = trues

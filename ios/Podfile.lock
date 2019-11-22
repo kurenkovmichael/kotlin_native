@@ -1,0 +1,42 @@
+PODS:
+  - KotlinNative (0.0.1)
+  - RxCocoa (5.0.1):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxRelay (5.0.1):
+    - RxSwift (~> 5)
+  - RxSwift (5.0.1)
+  - YandexMapKit (148.18.26):
+    - YandexRuntime (~> 157.1)
+  - YandexRuntime (157.1.2)
+
+DEPENDENCIES:
+  - KotlinNative (from `KotlinNative`)
+  - RxCocoa
+  - RxSwift
+  - YandexMapKit (= 148.18.26)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - RxCocoa
+    - RxRelay
+    - RxSwift
+  https://stash.desktop.dev.yandex.net/scm/mcp/mobile-cocoa-pod-specs.git:
+    - YandexMapKit
+    - YandexRuntime
+
+EXTERNAL SOURCES:
+  KotlinNative:
+    :path: KotlinNative
+
+SPEC CHECKSUMS:
+  KotlinNative: 260ab1d9175c11e0e5510b247c7071214bb12443
+  RxCocoa: e741b9749968e8a143e2b787f1dfbff2b63d0a5c
+  RxRelay: 89d54507f4fd4d969e6ec1d4bd7f3673640b4640
+  RxSwift: e2dc62b366a3adf6a0be44ba9f405efd4c94e0c4
+  YandexMapKit: 7ad96789ccefcc38c20e2b52ff72f9b30aaf8c8f
+  YandexRuntime: 64fc108d4a59410662058cc47927adfa9f621d8d
+
+PODFILE CHECKSUM: f5d358194fea6936fe86b9373c624c94bef07569
+
+COCOAPODS: 1.8.3

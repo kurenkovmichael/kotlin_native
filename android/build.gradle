@@ -1,0 +1,49 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.multiplatform'
+}
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "ru.yandex.sample.android"
+        minSdkVersion 24
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/rxkotlin.properties'
+        exclude 'META-INF/**.kotlin_module'
+    }
+}
+
+kotlin {
+    targets.fromPreset(presets.android, 'android')
+}
+
+dependencies {
+    implementation project(':multiplatform')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+
+    implementation 'com.bluelinelabs:conductor:2.1.5'
+    implementation 'com.andkulikov:transitionseverywhere:2.0.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha10'
+
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
+    implementation 'com.github.akarnokd:rxjava2-interop:0.13.7'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:2.0.0'
+
+}
